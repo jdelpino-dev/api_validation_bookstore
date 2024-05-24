@@ -3,7 +3,6 @@ const Book = require("../models/book");
 
 const router = new express.Router();
 
-
 /** GET / => {books: [book, ...]}  */
 
 router.get("/", async function (req, res, next) {
