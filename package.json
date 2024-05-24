@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
-    "debug": "node --inspect-brk src/server.js",
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "debug": "node --inspect-brk server.js",
     "test": "jest --verbose",
     "test:debug": "node --inspect-brk $(which jest) --runInBand"
   },
