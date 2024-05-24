@@ -4,9 +4,11 @@ import express from "express";
 import ExpressError from "./expressError.js";
 import bookRoutes from "./routes/books.js";
 
+// Create the express app
 const app = express();
 
-app.use(express.json());
+// Middleware
+app.use(express.json()); // Parse body data
 
 app.use("/books", bookRoutes);
 
