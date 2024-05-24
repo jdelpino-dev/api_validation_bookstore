@@ -1,4 +1,6 @@
 import express from "express";
+import { bookCreationSchema, bookUpdateSchema } from "../config.js";
+import validateSchema from "../middleware/validator.js";
 import Book from "../models/book.js";
 
 const router = new express.Router();
@@ -24,24 +26,32 @@ router.get("/:isbn", async function (req, res, next) {
 });
 
 /** POST /   bookData => {book: newBook}  */
-router.post("/", async function (req, res, next) {
-  try {
-    const book = await Book.create(req.body);
-    return res.status(201).json({ book });
-  } catch (err) {
-    return next(err);
+router.post(
+  "/",
+  validateSchema(bookCreationSchema),
+  async function (req, res, next) {
+    try {
+      const book = await Book.create(req.body);
+      return res.status(201).json({ book });
+    } catch (err) {
+      return next(err);
+    }
   }
-});
+);
 
 /** PUT /[isbn]   bookData => {book: updatedBook}  */
-router.put("/:isbn", async function (req, res, next) {
-  try {
-    const book = await Book.update(req.params.isbn, req.body);
-    return res.json({ book });
-  } catch (err) {
-    return next(err);
+router.put(
+  "/:isbn",
+  validateSchema(bookUpdateSchema),
+  async function (req, res, next) {
+    try {
+      const book = await Book.update(req.params.isbn, req.body);
+      return res.json({ book });
+    } catch (err) {
+      return next(err);
+    }
   }
-});
+);
 
 /** DELETE /[isbn]   => {message: "Book deleted"} */
 router.delete("/:isbn", async function (req, res, next) {
