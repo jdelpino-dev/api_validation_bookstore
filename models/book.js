@@ -109,14 +109,15 @@ class Book {
   static async update(isbn, data) {
     const result = await db.query(
       `UPDATE books SET 
-            amazon_url=($1),
-            author=($2),
-            language=($3),
-            pages=($4),
-            publisher=($5),
-            title=($6),
-            year=($7)
-            WHERE isbn=$8
+            isbn=($1),
+            amazon_url=($2),
+            author=($3),
+            language=($4),
+            pages=($5),
+            publisher=($6),
+            title=($7),
+            year=($8)
+            WHERE isbn=$9
         RETURNING isbn,
                   amazon_url,
                   author,
@@ -126,6 +127,7 @@ class Book {
                   title,
                   year`,
       [
+        data.isbn,
         data.amazon_url,
         data.author,
         data.language,
