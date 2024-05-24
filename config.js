@@ -1,5 +1,7 @@
 /** Common config for bookstore. */
 
+// Construct the DB_URI for the database connection.
+
 let DB_URI = `postgresql://`;
 
 if (process.env.NODE_ENV === "test") {
@@ -8,4 +10,4 @@ if (process.env.NODE_ENV === "test") {
   DB_URI = process.env.DATABASE_URL || `${DB_URI}/books`;
 }
 
-module.exports = { DB_URI };
+export { DB_URI };

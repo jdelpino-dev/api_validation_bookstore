@@ -1,12 +1,12 @@
 /** Express app for bookstore. */
 
-const express = require("express");
+import express from "express";
+import ExpressError from "./expressError.js";
+import bookRoutes from "./routes/books.js";
+
 const app = express();
 
 app.use(express.json());
-
-const ExpressError = require("./expressError");
-const bookRoutes = require("./routes/books");
 
 app.use("/books", bookRoutes);
 
@@ -28,4 +28,4 @@ app.use(function (err, req, res, next) {
   });
 });
 
-module.exports = app;
+export default app;

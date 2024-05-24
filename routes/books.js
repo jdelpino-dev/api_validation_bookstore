@@ -1,10 +1,9 @@
-const express = require("express");
-const Book = require("../models/book");
+import express from "express";
+import Book from "../models/book.js";
 
 const router = new express.Router();
 
 /** GET / => {books: [book, ...]}  */
-
 router.get("/", async function (req, res, next) {
   try {
     const books = await Book.findAll(req.query);
@@ -15,7 +14,6 @@ router.get("/", async function (req, res, next) {
 });
 
 /** GET /[id]  => {book: book} */
-
 router.get("/:id", async function (req, res, next) {
   try {
     const book = await Book.findOne(req.params.id);
@@ -26,7 +24,6 @@ router.get("/:id", async function (req, res, next) {
 });
 
 /** POST /   bookData => {book: newBook}  */
-
 router.post("/", async function (req, res, next) {
   try {
     const book = await Book.create(req.body);
@@ -37,7 +34,6 @@ router.post("/", async function (req, res, next) {
 });
 
 /** PUT /[isbn]   bookData => {book: updatedBook}  */
-
 router.put("/:isbn", async function (req, res, next) {
   try {
     const book = await Book.update(req.params.isbn, req.body);
@@ -48,7 +44,6 @@ router.put("/:isbn", async function (req, res, next) {
 });
 
 /** DELETE /[isbn]   => {message: "Book deleted"} */
-
 router.delete("/:isbn", async function (req, res, next) {
   try {
     await Book.remove(req.params.isbn);
@@ -58,4 +53,4 @@ router.delete("/:isbn", async function (req, res, next) {
   }
 });
 
-module.exports = router;
+export default router;

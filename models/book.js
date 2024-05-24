@@ -1,4 +1,4 @@
-const db = require("../db");
+import db from "../db.js";
 
 /** Collection of related methods for books. */
 
@@ -160,4 +160,4 @@ class Book {
   }
 }
 
-module.exports = Book;
+export default Book;

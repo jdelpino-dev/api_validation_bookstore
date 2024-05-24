@@ -1,7 +1,7 @@
 /** Server for bookstore. */
 
-const app = require("./app");
+import app from "./app.js";
 
-app.listen(3000, () => {
-  console.log(`Server starting on port 3000`);
+app.listen(3300, () => {
+  console.log(`Server starting on port 3300`);
 });
