@@ -105,19 +105,29 @@ class Book {
    * => {isbn, amazon_url, author, language, pages, publisher, title, year}
    *
    * */
-
   static async update(isbn, data) {
+    // Filter out keys with undefined values (probably unnecessary considering
+    // I am validating the data before sending it to this function)
+    let fields = Object.keys(data).filter((key) => data[key] !== undefined);
+
+    // If there are no valid fields to update, throw an error
+    if (fields.length === 0) {
+      throw { message: "No valid data to update", status: 400 };
+    }
+
+    // Build the query elements dynamically
+    let setCols = fields
+      .map((colName, idx) => `"${colName}"=$${idx + 1}`)
+      .join(", ");
+    let values = fields.map((colName) => data[colName]);
+
+    // Add the ISBN as the last value for the WHERE clause
+    values.push(isbn);
+
     const result = await db.query(
-      `UPDATE books SET 
-            isbn=($1),
-            amazon_url=($2),
-            author=($3),
-            language=($4),
-            pages=($5),
-            publisher=($6),
-            title=($7),
-            year=($8)
-            WHERE isbn=$9
+      `UPDATE books
+        SET ${setCols} 
+        WHERE isbn=$${values.length}
         RETURNING isbn,
                   amazon_url,
                   author,
@@ -126,17 +136,7 @@ class Book {
                   publisher,
                   title,
                   year`,
-      [
-        data.isbn,
-        data.amazon_url,
-        data.author,
-        data.language,
-        data.pages,
-        data.publisher,
-        data.title,
-        data.year,
-        isbn,
-      ]
+      values
     );
 
     if (result.rows.length === 0) {
