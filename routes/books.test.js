@@ -1,7 +1,6 @@
 import "dotenv/config";
 import request from "supertest";
 import app from "../app.js";
-import { initializeSchemas } from "../config/validatorConfig.js";
 import db from "../lib/db.js";
 
 let originalNODE_ENV;
@@ -15,8 +14,6 @@ describe("Book Routes", () => {
   beforeAll(async () => {
     originalNODE_ENV = process.env.NODE_ENV;
     process.env.NODE_ENV = "test";
-
-    await initializeSchemas();
 
     if (!db._connected) {
       await db.connect();
