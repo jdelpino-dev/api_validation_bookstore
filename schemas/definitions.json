@@ -1,17 +1,17 @@
 {
-  "$id": "https://example.com/schemas/definitions.json",
+  "$id": "internal:schemas/definitions.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "isbn": {
       "type": "string",
-      "title": "The Isbn Schema",
+      "title": "The ISBN Schema",
       "default": "",
       "examples": ["0691161518"],
       "pattern": "^(.*)$"
     },
     "amazon_url": {
       "type": "string",
-      "title": "The Amazon_url Schema",
+      "title": "The Amazon URL Schema",
       "default": "",
       "examples": ["http://a.co/eobPtX2"],
       "pattern": "^(.*)$",
@@ -28,7 +28,7 @@
       "type": "string",
       "title": "The Language Schema",
       "default": "",
-      "examples": ["english"],
+      "examples": ["English"],
       "pattern": "^(.*)$"
     },
     "pages": {

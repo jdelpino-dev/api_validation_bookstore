@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://example.com/schemas/bookCreationSchema.json",
+  "$id": "internal:schemas/bookCreationSchema.json",
   "type": "object",
   "title": "Book Creation Schema",
   "required": [
@@ -14,13 +14,13 @@
     "year"
   ],
   "properties": {
-    "isbn": { "$ref": "https://example.com/schemas/definitions.json#/definitions/isbn" },
-    "amazon_url": { "$ref": "https://example.com/schemas/definitions.json#/definitions/amazon_url" },
-    "author": { "$ref": "https://example.com/schemas/definitions.json#/definitions/author" },
-    "language": { "$ref": "https://example.com/schemas/definitions.json#/definitions/language" },
-    "pages": { "$ref": "https://example.com/schemas/definitions.json#/definitions/pages" },
-    "publisher": { "$ref": "https://example.com/schemas/definitions.json#/definitions/publisher" },
-    "title": { "$ref": "https://example.com/schemas/definitions.json#/definitions/title" },
-    "year": { "$ref": "https://example.com/schemas/definitions.json#/definitions/year" }
+    "isbn": { "$ref": "internal:schemas/definitions.json#/definitions/isbn" },
+    "amazon_url": { "$ref": "internal:schemas/definitions.json#/definitions/amazon_url" },
+    "author": { "$ref": "internal:schemas/definitions.json#/definitions/author" },
+    "language": { "$ref": "internal:schemas/definitions.json#/definitions/language" },
+    "pages": { "$ref": "internal:schemas/definitions.json#/definitions/pages" },
+    "publisher": { "$ref": "internal:schemas/definitions.json#/definitions/publisher" },
+    "title": { "$ref": "internal:schemas/definitions.json#/definitions/title" },
+    "year": { "$ref": "internal:schemas/definitions.json#/definitions/year" }
   }
 }

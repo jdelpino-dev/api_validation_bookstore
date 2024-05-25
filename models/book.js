@@ -1,4 +1,4 @@
-import db from "../db.js";
+import db from "../lib/db.js";
 
 /** Collection of related methods for books. */
 

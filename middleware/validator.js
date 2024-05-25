@@ -1,57 +1,39 @@
-/** Common config for bookstore. */
+import schemaValidator, {
+  initializeSchemas,
+} from "../config/validatorConfig.js";
 
-import { promises as fs } from "fs";
-import { Validator } from "jsonschema";
-import path from "path";
+let schemasLoaded = false;
 
-// Function to load schema from a file
-async function loadSchema(schemaPath) {
-  try {
-    const data = await fs.readFile(schemaPath, "utf8");
-    return JSON.parse(data);
-  } catch (error) {
-    console.error(`Failed to load schema from ${schemaPath}:`, error);
-    throw error;
-  }
-}
+const loadSchemas = async () => {
+  await initializeSchemas();
+  schemasLoaded = true;
+};
 
-// Function to initialize schemas and validator
-async function initializeSchemas() {
-  const schemaDir = path.join(process.cwd(), "schemas");
+const loadSchemasPromise = loadSchemas(); // Ensure schemas are loaded before exporting the validation functions
 
-  const bookCreationSchema = await loadSchema(
-    path.join(schemaDir, "bookCreationSchema.json")
-  );
-  const bookUpdateSchema = await loadSchema(
-    path.join(schemaDir, "bookUpdateSchema.json")
-  );
-
-  // Initialize the JSON schema validator
-  const validator = new Validator();
-
-  // Load and add the definitions schema for resolving references
-  const definitionsSchema = await loadSchema(
-    path.join(schemaDir, "definitions.json")
-  );
-  validator.addSchema(
-    definitionsSchema,
-    "https://example.com/schemas/definitions.json"
-  );
-
-  return { bookCreationSchema, bookUpdateSchema, validator };
-}
-
-// Function to validate data against a schema
-function validateData(validator, schema) {
-  return (req, res, next) => {
-    const result = validator.validate(req.body, schema);
-    if (!result.valid) {
-      const errors = result.errors.map((error) => error.stack);
-      return res.status(400).json({ errors });
+const validate = (schemaName) => {
+  return async (req, res, next) => {
+    try {
+      await loadSchemasPromise; // Ensure schemas are loaded
+      if (!schemasLoaded) {
+        throw new Error("Schemas not loaded yet");
+      }
+      const schema = schemaValidator.validator.schemas[schemaName];
+      if (!schema) {
+        throw new Error(`Schema not found: ${schemaName}`);
+      }
+      schemaValidator.validate(req.body, schema);
+      next();
+    } catch (error) {
+      console.error(`${schemaName} validation error:`, error);
+      return res.status(400).json({ errors: error.message });
     }
-    next();
   };
-}
+};
 
-// Export the initialization function and validateData function
-export { initializeSchemas, validateData };
+const validateBookCreation = validate(
+  "internal:schemas/bookCreationSchema.json"
+);
+const validateBookUpdate = validate("internal:schemas/bookUpdateSchema.json");
+
+export { validateBookCreation, validateBookUpdate };

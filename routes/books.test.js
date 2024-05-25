@@ -1,7 +1,8 @@
-import "dotenv/config"; // read .env files and make changes to env variables
+import "dotenv/config";
 import request from "supertest";
-import app from "../app";
-import db from "../db";
+import app from "../app.js";
+import { initializeSchemas } from "../config/validatorConfig.js";
+import db from "../lib/db.js";
 
 let originalNODE_ENV;
 
@@ -12,17 +13,16 @@ describe("Book Routes", () => {
   let bookIsbn3 = `3333333333`;
 
   beforeAll(async () => {
-    // Load environment variables for testing
     originalNODE_ENV = process.env.NODE_ENV;
     process.env.NODE_ENV = "test";
 
-    // Ensure the database is connected and clean up before tests
+    await initializeSchemas();
+
     if (!db._connected) {
       await db.connect();
       db._connected = true;
     }
 
-    // Clean up any pre-existing data in the database
     const response = await request(app).get("/books");
     const bookIsbns = response.body.books
       ? response.body.books.map((book) => book.isbn)
@@ -36,7 +36,6 @@ describe("Book Routes", () => {
   });
 
   afterAll(async () => {
-    // Cleanup the books created during the tests
     const response = await request(app).get("/books");
     const bookIsbns = response.body.books
       ? response.body.books.map((book) => book.isbn)
@@ -48,9 +47,7 @@ describe("Book Routes", () => {
       })
     );
 
-    // Close the database connection
     await db.end();
-    // Restore the original NODE_ENV
     process.env.NODE_ENV = originalNODE_ENV;
   });
 
@@ -119,15 +116,12 @@ describe("Book Routes", () => {
         request(app).post("/books").send(newBook2).expect(201),
         request(app).post("/books").send(newBook3).expect(201),
       ]);
-
-      responses.forEach((res) => console.log(res.body)); // Debugging information
     });
   });
 
-  describe("GET /books –PART 2–", () => {
+  describe("GET /books", () => {
     it("should return all books added so far", async () => {
       const res = await request(app).get("/books");
-      console.log(res.body); // Debugging information
       expect(res.status).toBe(200);
       expect(res.body.books.length).toBe(4);
     });
@@ -184,10 +178,9 @@ describe("Book Routes", () => {
     });
   });
 
-  describe("GET /books –PART 3–", () => {
+  describe("GET /books", () => {
     it("should return all books left", async () => {
       const res = await request(app).get("/books");
-      console.log(res.body); // Debugging information
       expect(res.status).toBe(200);
       expect(res.body.books.length).toBe(3);
     });
