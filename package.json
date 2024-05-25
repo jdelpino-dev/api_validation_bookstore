@@ -11,14 +11,6 @@
   },
   "author": "José Delpino",
   "license": "Proprietary - All rights reserved",
-  "jest": {
-    "transform": {
-      "^.+\\.[t|j]sx?$": "babel-jest"
-    },
-    "setupFilesAfterEnv": [
-      "./jest.setup.js"
-    ]
-  },
   "testEnvironment": "node",
   "devDependencies": {
     "@babel/core": "^7.24.5",
